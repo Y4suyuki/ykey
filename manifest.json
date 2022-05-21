@@ -1,6 +1,6 @@
 {
-  "name": "TS Chrome Extension Example",
-  "description": "Build a Extension!",
+  "name": "ykey",
+  "description": "handy shortcut keys",
   "version": "1.0",
   "manifest_version": 3,
   "background": {
