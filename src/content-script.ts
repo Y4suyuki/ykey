@@ -9,6 +9,17 @@ const logKeyCode = (e: KeyboardEvent) => {
     case 'KeyK':
       window.scrollBy(0, -scrollPitch)
       break
+    case 'BracketRight':
+      chrome.runtime.sendMessage({action: "NextTab"}, async function(res) {
+        console.log(res)
+      })
+      break
+
+    case 'BracketLeft':
+      chrome.runtime.sendMessage({action: "PreviousTab"}, async function(res) {
+        console.log(res)
+      })
+      break
     default:
       console.log("%cno match", "color: green;")
   }
