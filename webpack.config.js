@@ -7,6 +7,7 @@ module.exports = {
     'content-script': './src/content-script.ts',
   },
   mode: 'none',
+  watch: true,
   module: {
     rules: [
       {
