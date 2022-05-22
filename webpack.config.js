@@ -6,6 +6,7 @@ module.exports = {
     popup: './src/popup.ts',
     'content-script': './src/content-script.ts',
   },
+  mode: 'none',
   module: {
     rules: [
       {
