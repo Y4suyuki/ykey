@@ -1,6 +1,17 @@
-const scrollPitch = 25
+const scrollPitch = 50
 
-const logKeyCode = (e: KeyboardEvent) => {
+const isEngagingInputForm = () => {
+  const activeTabName = document.activeElement.tagName
+
+  const inputFormTagNames = [
+    "INPUT",
+    "TEXTAREA"
+  ]
+
+  return inputFormTagNames.some(x => x === activeTabName)
+}
+
+const actionWithKey = (e: KeyboardEvent) => {
   console.log(`code: ${e.code}`)
   switch (e.code) {
     case 'KeyJ':
@@ -14,7 +25,6 @@ const logKeyCode = (e: KeyboardEvent) => {
         console.log(res)
       })
       break
-
     case 'BracketLeft':
       chrome.runtime.sendMessage({action: "PreviousTab"}, async function(res) {
         console.log(res)
@@ -32,4 +42,9 @@ window.addEventListener('click', function(e) {
   console.log(e)
 })
 
-window.addEventListener('keydown', logKeyCode)
+window.addEventListener('keydown', function(e) {
+  if (isEngagingInputForm()) {
+    return
+  }
+  actionWithKey(e)
+})
