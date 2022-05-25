@@ -43,11 +43,6 @@ const actionWithKey = (e: KeyboardEvent) => {
 
 console.log("load content-script.ts");
 
-window.addEventListener("click", function (e) {
-  console.log("%c!! firing mouse click event", "color: green;");
-  console.log(e);
-});
-
 window.addEventListener("keydown", function (e) {
   if (isEngagingInputForm()) {
     return;
