@@ -8,8 +8,14 @@ const isEngagingInputForm = () => {
   return inputFormTagNames.some((x) => x === activeTabName);
 };
 
-const actionWithKey = (e: KeyboardEvent) => {
+const logKeyEvent = (e: KeyboardEvent) => {
   console.log(`code: ${e.code}`);
+  console.log(`%ckeyboard event`, "color: green;");
+  console.dir(e);
+};
+
+const actionWithKey = (e: KeyboardEvent) => {
+  logKeyEvent(e);
   switch (e.code) {
     case "KeyJ":
       window.scrollBy(0, scrollPitch);
