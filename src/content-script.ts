@@ -36,6 +36,10 @@ const actionWithKey = (e: KeyboardEvent) => {
         }
       );
       break;
+    case "KeyT":
+      chrome.runtime.sendMessage({ action: "NewTab" }, async function (res) {
+        console.log(res);
+      });
     default:
       console.log("%cno match", "color: green;");
   }

@@ -67,6 +67,12 @@ chrome.runtime.onMessage.addListener(async function (
       await chrome.tabs.update(previousTab.id, { active: true });
       sendResponse({ farewell: "goodbye" });
       break;
+    case "NewTab":
+      await chrome.tabs.create({
+        active: true,
+      });
+      sendResponse({ farewell: "goodbye" });
+      break;
     default:
       console.log("%cNothing matched", "color: green;");
   }
