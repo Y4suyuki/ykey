@@ -1,28 +1,28 @@
-const path = require('path');
+const path = require("path");
 
 module.exports = {
   entry: {
-    background: './src/background.ts',
-    popup: './src/popup.ts',
-    'content-script': './src/content-script.ts',
+    background: "./src/background.ts",
+    popup: "./src/popup.ts",
+    "content-script": "./src/content-script.ts",
   },
-  mode: 'none',
+  mode: "none",
   watch: true,
   module: {
     rules: [
       {
         test: /\.ts$/,
-        use: 'ts-loader',
+        use: "ts-loader",
         exclude: /node_modules/,
       },
     ],
   },
   resolve: {
-    extensions: ['.ts', '.js'],
+    extensions: [".ts", ".js"],
   },
   output: {
-    filename: '[name].js',
-    path: path.resolve(__dirname, 'dist'),
+    filename: "[name].js",
+    path: path.resolve(__dirname, "dist"),
     clean: true,
   },
 };

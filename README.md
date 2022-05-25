@@ -1,3 +1,1 @@
 # Typescript Chrome Extension Starter
-
-

@@ -6,16 +6,8 @@
   "background": {
     "service_worker": "dist/background.js"
   },
-  "permissions": [
-    "storage",
-    "activeTab",
-    "scripting",
-    "tabs"
-  ],
-  "host_permissions": [
-    "https://*/*",
-    "http://*/*"
-  ],
+  "permissions": ["storage", "activeTab", "scripting", "tabs"],
+  "host_permissions": ["https://*/*", "http://*/*"],
   "action": {
     "default_popup": "popup.html"
   },
