@@ -6,6 +6,12 @@
   "background": {
     "service_worker": "dist/background.js"
   },
+  "content_scripts": [
+    {
+      "matches": ["https://*/*", "http://*/*"],
+      "js": ["dist/content-script.js"]
+    }
+  ],
   "permissions": ["storage", "activeTab", "scripting", "tabs"],
   "host_permissions": ["https://*/*", "http://*/*"],
   "action": {
