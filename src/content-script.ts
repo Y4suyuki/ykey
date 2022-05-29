@@ -1,11 +1,19 @@
 const scrollPitch = 50;
 
 const isEngagingInputForm = () => {
-  const activeTabName = document.activeElement.tagName;
+  const activeTagName = document.activeElement.tagName;
 
   const inputFormTagNames = ["INPUT", "TEXTAREA"];
 
-  return inputFormTagNames.some((x) => x === activeTabName);
+  return (
+    inputFormTagNames.some((x) => x === activeTagName) ||
+    isEngagingInMiroStickyNote()
+  );
+};
+
+const isEngagingInMiroStickyNote = () => {
+  const activeElement = document.activeElement;
+  return activeElement.className === "ql-editor";
 };
 
 const logKeyEvent = (e: KeyboardEvent) => {
