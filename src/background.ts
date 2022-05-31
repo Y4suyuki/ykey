@@ -70,6 +70,10 @@ chrome.runtime.onMessage.addListener(async function (
       });
       sendResponse({ farewell: "goodbye" });
       break;
+    case "DeleteCurrentTab":
+      await chrome.tabs.remove(currentTab.id);
+      sendResponse({ farewell: "goodbye" });
+      break;
     default:
       console.log("%cNothing matched", "color: green;");
   }
