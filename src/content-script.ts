@@ -1,3 +1,5 @@
+import { keyboardEventToAction } from "./keyboard";
+
 type Mode = "normal" | "dom" | "switch" | "delete";
 
 let mode: Mode = "normal";
@@ -19,40 +21,32 @@ const isEngagingInMiroStickyNote = () => {
   return activeElement.className === "ql-editor";
 };
 
-const logKeyEvent = (e: KeyboardEvent) => {
-  console.log(`code: ${e.code}`);
-  console.log(`%ckeyboard event`, "color: green;");
-  console.dir(e);
-};
-
 const actionWithKey = (e: KeyboardEvent) => {
-  logKeyEvent(e);
-  switch (e.code) {
-    case "KeyJ":
+  let action = keyboardEventToAction(e);
+  switch (action.type) {
+    case "ScrollDown":
       window.scrollBy(0, scrollPitch);
       break;
-    case "KeyK":
+    case "ScrollUp":
       window.scrollBy(0, -scrollPitch);
       break;
-    case "BracketRight":
-      chrome.runtime.sendMessage({ action: "NextTab" }, async function (res) {
+    case "NextTab":
+      chrome.runtime.sendMessage(action, async function (res) {
         console.log(res);
       });
       break;
-    case "BracketLeft":
-      chrome.runtime.sendMessage(
-        { action: "PreviousTab" },
-        async function (res) {
-          console.log(res);
-        }
-      );
-      break;
-    case "KeyT":
-      chrome.runtime.sendMessage({ action: "NewTab" }, async function (res) {
+    case "PreviousTab":
+      chrome.runtime.sendMessage(action, async function (res) {
         console.log(res);
       });
+      break;
+    case "NewTab":
+      chrome.runtime.sendMessage(action, async function (res) {
+        console.log(res);
+      });
+      break;
 
-    case "KeyC":
+    case "HistoryBack":
       if (mode === "switch") {
         window.history.back();
         mode = "normal";
@@ -61,20 +55,17 @@ const actionWithKey = (e: KeyboardEvent) => {
         console.log(`%cmode changed to ${mode}`, "color: green;");
       }
       break;
-    case "KeyF":
+    case "HistoryForward":
       if (mode === "switch") {
         window.history.forward();
       }
       mode = "normal";
       break;
-    case "KeyX":
+    case "DeleteCurrentTab":
       if (mode === "delete") {
-        chrome.runtime.sendMessage(
-          { action: "DeleteCurrentTab" },
-          async function (res) {
-            console.log(res);
-          }
-        );
+        chrome.runtime.sendMessage(action, async function (res) {
+          console.log(res);
+        });
         mode = "normal";
       } else {
         mode = "delete";

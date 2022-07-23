@@ -52,7 +52,7 @@ chrome.runtime.onMessage.addListener(async function (
   );
 
   const currentTab = await getCurrentTab();
-  switch (req.action) {
+  switch (req.type) {
     case "NextTab":
       const nextTab = await getNextTab(currentTab);
       await chrome.tabs.update(nextTab.id, { active: true });
