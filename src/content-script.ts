@@ -1,6 +1,6 @@
 import { keyboardEventToAction } from "./keyboard";
 
-type Mode = "normal" | "dom" | "switch" | "delete";
+type Mode = "normal" | "dom" | "switch" | "delete" | "ignoreNext";
 
 let mode: Mode = "normal";
 const scrollPitch = 50;
@@ -23,7 +23,15 @@ const isEngagingInMiroStickyNote = () => {
 
 const actionWithKey = (e: KeyboardEvent) => {
   let action = keyboardEventToAction(e);
+  if (mode === "ignoreNext") {
+    console.log("Ignoring. setting mode normal.")
+    mode = "normal"
+    return
+  }
   switch (action.type) {
+    case "IgnoreNext":
+      mode = "ignoreNext"
+      break;
     case "ScrollDown":
       window.scrollBy(0, scrollPitch);
       break;

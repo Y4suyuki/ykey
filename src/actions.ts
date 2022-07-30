@@ -6,7 +6,9 @@ type ActionType =
   | "PreviousTab"
   | "HistoryBack"
   | "HistoryForward"
-  | "DeleteCurrentTab";
+  | "DeleteCurrentTab"
+  | "IgnoreNext";
+
 
 export type Action = {
   type: ActionType;
