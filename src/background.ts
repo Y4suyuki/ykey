@@ -1,8 +1,3 @@
-// on install
-chrome.runtime.onInstalled.addListener(() => {
-  console.log("%cOn install", "color: green;");
-});
-
 chrome.runtime.onInstalled.addListener(async ({ reason }) => {
   console.log("reason:", reason);
 

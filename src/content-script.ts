@@ -91,5 +91,10 @@ window.addEventListener("keydown", function (e) {
   if (isEngagingInputForm()) {
     return;
   }
-  actionWithKey(e);
+  chrome.storage.sync.get("ignoreHosts", ({ ignoreHosts }) => {
+    if (window.location.hostname === ignoreHosts) {
+      return;
+    }
+    actionWithKey(e);
+  })
 });
