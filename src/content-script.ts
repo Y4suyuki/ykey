@@ -92,7 +92,7 @@ window.addEventListener("keydown", function (e) {
     return;
   }
   chrome.storage.sync.get("ignoreHosts", ({ ignoreHosts }) => {
-    if (window.location.hostname === ignoreHosts) {
+    if (ignoreHosts.some((x: string) => x === window.location.hostname)) {
       return;
     }
     actionWithKey(e);
