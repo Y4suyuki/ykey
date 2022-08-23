@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import * as ReactDOM from "react-dom/client"
+import "./style.css"
 
 const App = () => {
   const ok = "✅"
