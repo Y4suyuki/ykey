@@ -2,8 +2,8 @@ import { useEffect, useState } from "react"
 import * as ReactDOM from "react-dom/client"
 
 const App = () => {
-  const ok = "ok"
-  const ng = "ng"
+  const ok = "✅"
+  const ng = "🚫"
   let cond = true
   const [url, setUrl] = useState(window.location.href)
   const handleClick = () => {
