@@ -5,32 +5,36 @@ import "./style.css"
 const App = () => {
   const ok = "✅"
   const ng = "🚫"
-  let cond = true
   const [url, setUrl] = useState(window.location.href)
+  const [isEffect, setIsEffect] = useState(true)
+
   const handleClick = () => {
-    const hostname = new URL(url).hostname
     console.log("handleClick!")
+    const hostname = new URL(url).hostname
     chrome.storage.sync.get("ignoreHosts", ({ ignoreHosts }) => {
       if (ignoreHosts.some((x: string) => x === hostname)) {
         console.log("do nothing!")
         return
       }
       console.log("setting ignoreHosts")
-      chrome.storage.sync.set({ignoreHosts: [hostname]})
+      chrome.storage.sync.set({ignoreHosts: [...ignoreHosts, hostname]})
+      setIsEffect(false)
     })
   }
   useEffect(() => {
     chrome.storage.sync.get("ignoreHosts", ({ ignoreHosts }) => {
       console.log("ignoreHosts:", ignoreHosts)
+      chrome.tabs.query({active: true, lastFocusedWindow: true}).then((tabs) => {
+        const [tab] = tabs
+        setUrl(tab.url)
+        const hostname = new URL(tab.url).hostname
+        setIsEffect(!ignoreHosts?.some((x: string) => x === hostname))
+      })
     })
-    chrome.tabs.query({active: true, lastFocusedWindow: true}).then((tabs) => {
-      const [tab] = tabs
-      setUrl(tab.url)
-    })
-  }, [url, setUrl])
+  }, [url, setUrl, setIsEffect])
   return <div className="App">
     <div>Hello world</div>
-    <div onClick={handleClick} style={{cursor: "pointer"}}>{cond ? ok : ng}{url}</div>
+    <div onClick={handleClick} style={{cursor: "pointer"}}>{isEffect ? ok : ng}{url}</div>
   </div>
 }
 
