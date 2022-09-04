@@ -24,13 +24,13 @@ const isEngagingInMiroStickyNote = () => {
 const actionWithKey = (e: KeyboardEvent) => {
   let action = keyboardEventToAction(e);
   if (mode === "ignoreNext") {
-    console.log("Ignoring. setting mode normal.")
-    mode = "normal"
-    return
+    console.log("Ignoring. setting mode normal.");
+    mode = "normal";
+    return;
   }
   switch (action.type) {
     case "IgnoreNext":
-      mode = "ignoreNext"
+      mode = "ignoreNext";
       break;
     case "ScrollDown":
       window.scrollBy(0, scrollPitch);
@@ -92,9 +92,9 @@ window.addEventListener("keydown", function (e) {
     return;
   }
   chrome.storage.sync.get("ignoreHosts", ({ ignoreHosts }) => {
-    if (ignoreHosts.some((x: string) => x === window.location.hostname)) {
+    if (ignoreHosts?.some((x: string) => x === window.location.hostname)) {
       return;
     }
     actionWithKey(e);
-  })
+  });
 });
