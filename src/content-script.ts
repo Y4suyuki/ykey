@@ -11,7 +11,7 @@ const isEngagingInputForm = () => {
   const inputFormTagNames = ["INPUT", "TEXTAREA"];
 
   return (
-    inputFormTagNames.some((x) => x === activeTagName) ||
+    inputFormTagNames?.some((x) => x === activeTagName) ||
     isEngagingInMiroStickyNote()
   );
 };

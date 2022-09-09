@@ -12,7 +12,7 @@ const App = () => {
     console.log("handleClick!")
     const hostname = new URL(url).hostname
     chrome.storage.sync.get("ignoreHosts", ({ ignoreHosts }) => {
-      if (ignoreHosts.some((x: string) => x === hostname)) {
+      if (ignoreHosts?.some((x: string) => x === hostname)) {
         console.log(`pop out hostname: ${hostname}`)
         chrome.storage.sync.set({ignoreHosts: ignoreHosts.filter((x: string) => x !== hostname)})
         setIsEffect(true)
