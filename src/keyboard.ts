@@ -1,5 +1,5 @@
 import { Action } from "./actions";
-type Mode = "normal" | "dom" | "switch" | "delete";
+type Mode = "normal" | "dom" | "switch" | "delete" | "jumpScroll";
 
 let mode: Mode = "normal";
 
@@ -20,19 +20,19 @@ const backToNormalModeAfter = (s: number) => {
 const setMode = (m: Mode) => {
   mode = m;
   console.log(`%csetting mode: ${m}`, "color: green;");
-  backToNormalModeAfter(1800);
+  backToNormalModeAfter(800);
 };
 
 const createAction = (
   action: Action,
   cond: boolean,
-  fallback: null | (() => void) = null
+  fallback: null | (() => Action) = null
 ) => {
   if (cond) {
     return action;
   }
 
-  fallback ? fallback() : null;
+  return fallback ? fallback() : ({ type: "Ignore" } as Action);
 };
 export const keyboardEventToAction = (e: KeyboardEvent): Action => {
   logKeyEvent(e);
@@ -76,6 +76,21 @@ export const keyboardEventToAction = (e: KeyboardEvent): Action => {
         type: "Ignore",
       };
     });
+  }
+  if (e.code === "KeyG" && noCtrlShiftAlt) {
+    return createAction(
+      { type: "JumpScrollToTop" },
+      mode === "jumpScroll",
+      () => {
+        setMode("jumpScroll");
+        return {
+          type: "Ignore",
+        };
+      }
+    );
+  }
+  if (e.code === "KeyG" && e.shiftKey) {
+    return createAction({ type: "JumpScrollToBottom" }, isNormal);
   }
 
   return {

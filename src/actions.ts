@@ -7,7 +7,9 @@ type ActionType =
   | "HistoryBack"
   | "HistoryForward"
   | "DeleteCurrentTab"
-  | "Ignore";
+  | "Ignore"
+  | "JumpScrollToTop"
+  | "JumpScrollToBottom";
 
 export type Action = {
   type: ActionType;

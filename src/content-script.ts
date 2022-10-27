@@ -20,6 +20,8 @@ const isEngagingInMiroStickyNote = () => {
 
 const actionWithKey = (e: KeyboardEvent) => {
   let action = keyboardEventToAction(e);
+  console.log(`%cGetting action: `, { color: "green" });
+  console.log(action);
   switch (action.type) {
     case "ScrollDown":
       window.scrollBy(0, scrollPitch);
@@ -53,6 +55,12 @@ const actionWithKey = (e: KeyboardEvent) => {
       chrome.runtime.sendMessage(action, async function (res) {
         console.log(res);
       });
+      break;
+    case "JumpScrollToTop":
+      window.scrollTo(0, 0);
+      break;
+    case "JumpScrollToBottom":
+      window.scrollTo(0, document.body.scrollHeight);
       break;
     default:
       console.log("%cno match", "color: green;");
