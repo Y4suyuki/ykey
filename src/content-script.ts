@@ -1,8 +1,5 @@
 import { keyboardEventToAction } from "./keyboard";
 
-type Mode = "normal" | "dom" | "switch" | "delete" | "ignoreNext";
-
-let mode: Mode = "normal";
 const scrollPitch = 50;
 
 const isEngagingInputForm = () => {
@@ -23,15 +20,7 @@ const isEngagingInMiroStickyNote = () => {
 
 const actionWithKey = (e: KeyboardEvent) => {
   let action = keyboardEventToAction(e);
-  if (mode === "ignoreNext") {
-    console.log("Ignoring. setting mode normal.");
-    mode = "normal";
-    return;
-  }
   switch (action.type) {
-    case "IgnoreNext":
-      mode = "ignoreNext";
-      break;
     case "ScrollDown":
       window.scrollBy(0, scrollPitch);
       break;
@@ -55,30 +44,15 @@ const actionWithKey = (e: KeyboardEvent) => {
       break;
 
     case "HistoryBack":
-      if (mode === "switch") {
-        window.history.back();
-        mode = "normal";
-      } else {
-        mode = "switch";
-        console.log(`%cmode changed to ${mode}`, "color: green;");
-      }
+      window.history.back();
       break;
     case "HistoryForward":
-      if (mode === "switch") {
-        window.history.forward();
-      }
-      mode = "normal";
+      window.history.forward();
       break;
     case "DeleteCurrentTab":
-      if (mode === "delete") {
-        chrome.runtime.sendMessage(action, async function (res) {
-          console.log(res);
-        });
-        mode = "normal";
-      } else {
-        mode = "delete";
-        console.log(`%cmode changed to ${mode}`, "color: green;");
-      }
+      chrome.runtime.sendMessage(action, async function (res) {
+        console.log(res);
+      });
       break;
     default:
       console.log("%cno match", "color: green;");
