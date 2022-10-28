@@ -25,14 +25,22 @@ async function getCurrentTab() {
 async function getNextTab(tab: chrome.tabs.Tab) {
   console.log(`tabId: ${tab.id}`);
   console.log(`tab.index: ${tab.index}`);
-  const [nextTab] = await chrome.tabs.query({ index: tab.index + 1 });
+  console.log(`tab.windowId: ${tab.windowId}`);
+  const [nextTab] = await chrome.tabs.query({
+    index: tab.index + 1,
+    currentWindow: true,
+  });
   return nextTab;
 }
 
 async function getPreviousTab(tab: chrome.tabs.Tab) {
   console.log(`tabId: ${tab.id}`);
   console.log(`tab.index: ${tab.index}`);
-  const [previousTab] = await chrome.tabs.query({ index: tab.index - 1 });
+  console.log(`tab.windowId: ${tab.windowId}`);
+  const [previousTab] = await chrome.tabs.query({
+    index: tab.index - 1,
+    currentWindow: true,
+  });
   return previousTab;
 }
 
