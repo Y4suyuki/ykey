@@ -74,7 +74,7 @@ window.addEventListener("keydown", function (e) {
     return;
   }
   chrome.storage.sync.get("ignoreHosts", ({ ignoreHosts }) => {
-    if (ignoreHosts?.some((x: string) => x === window.location.hostname)) {
+    if (ignoreHosts?.some((x: string) => x === window.location.hostname) && e.code !== "BracketRight" && e.code !== "BracketLeft") {
       return;
     }
     actionWithKey(e);
