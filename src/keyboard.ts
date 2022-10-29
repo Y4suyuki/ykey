@@ -1,5 +1,5 @@
 import { Action } from "./actions";
-type Mode = "normal" | "dom" | "switch" | "delete" | "jumpScroll";
+type Mode = "normal" | "dom" | "switch" | "delete" | "jumpScroll" | "search";
 
 let mode: Mode = "normal";
 
@@ -67,7 +67,20 @@ export const keyboardEventToAction = (e: KeyboardEvent): Action => {
     });
   }
   if (e.code === "KeyF" && noCtrlShiftAlt) {
-    return createAction({ type: "HistoryForward" }, mode === "switch");
+    if (mode === "switch") {
+      return {
+        type: "HistoryForward",
+      };
+    }
+    if (mode === "search") {
+      return {
+        type: "SearchClickables",
+      };
+    }
+    setMode("search");
+    return {
+      type: "Ignore",
+    };
   }
   if (e.code === "KeyX" && noCtrlShiftAlt) {
     return createAction({ type: "DeleteCurrentTab" }, mode === "delete", () => {
@@ -91,6 +104,8 @@ export const keyboardEventToAction = (e: KeyboardEvent): Action => {
   }
   if (e.code === "KeyG" && e.shiftKey) {
     return createAction({ type: "JumpScrollToBottom" }, isNormal);
+  }
+  if (e.code === "KeyF" && noCtrlShiftAlt) {
   }
 
   return {

@@ -1,4 +1,9 @@
+/*
+  content script runs on browser frontend
+ */
+
 import { keyboardEventToAction } from "./keyboard";
+import { searchAndTagClickables } from "./searchClickables";
 
 const scrollPitch = 50;
 
@@ -44,7 +49,6 @@ const actionWithKey = (e: KeyboardEvent) => {
         console.log(res);
       });
       break;
-
     case "HistoryBack":
       window.history.back();
       break;
@@ -62,6 +66,10 @@ const actionWithKey = (e: KeyboardEvent) => {
     case "JumpScrollToBottom":
       window.scrollTo(0, document.body.scrollHeight);
       break;
+    case "SearchClickables":
+      console.log("SearchClickables");
+      searchAndTagClickables();
+      break;
     default:
       console.log("%cno match", "color: green;");
   }
@@ -74,7 +82,11 @@ window.addEventListener("keydown", function (e) {
     return;
   }
   chrome.storage.sync.get("ignoreHosts", ({ ignoreHosts }) => {
-    if (ignoreHosts?.some((x: string) => x === window.location.hostname) && e.code !== "BracketRight" && e.code !== "BracketLeft") {
+    if (
+      ignoreHosts?.some((x: string) => x === window.location.hostname) &&
+      e.code !== "BracketRight" &&
+      e.code !== "BracketLeft"
+    ) {
       return;
     }
     actionWithKey(e);

@@ -9,7 +9,8 @@ type ActionType =
   | "DeleteCurrentTab"
   | "Ignore"
   | "JumpScrollToTop"
-  | "JumpScrollToBottom";
+  | "JumpScrollToBottom"
+  | "SearchClickables";
 
 export type Action = {
   type: ActionType;
