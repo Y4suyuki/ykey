@@ -1,20 +1,31 @@
 import { Action } from "./actions";
-type Mode = "normal" | "dom" | "switch" | "delete" | "jumpScroll" | "search";
+import { detachTags } from "./searchClickables";
+type Mode =
+  | "normal"
+  | "dom"
+  | "switch"
+  | "delete"
+  | "jumpScroll"
+  | "search"
+  | "clicking";
 
 let mode: Mode = "normal";
+let idContainer: NodeJS.Timeout[] = [];
 
 const logKeyEvent = (e: KeyboardEvent) => {
+  console.log(`%cmode: ${mode}`, "color: white; background: deeppink;");
   console.log(`code: ${e.code}`);
   console.log(`%ckeyboard event`, "color: green;");
   console.dir(e);
 };
 
 const backToNormalModeAfter = (s: number) => {
-  setTimeout(() => {
+  const _id = setTimeout(() => {
     console.log("hello from timeout");
     mode = "normal";
     console.log("now mode is " + mode);
   }, s);
+  idContainer.push(_id);
 };
 
 const setMode = (m: Mode) => {
@@ -34,10 +45,36 @@ const createAction = (
 
   return fallback ? fallback() : ({ type: "Ignore" } as Action);
 };
+
+const findTooltipAndClick = (e: KeyboardEvent, key: string) => {
+  if (e.key === key) {
+    const tooltip = document.querySelector(`span.${key}`);
+    const p = tooltip.parentElement;
+    p.click();
+  }
+};
+export const clickWithKey = (e: KeyboardEvent) => {
+  // TODO: fix
+  for (let x of "abcdefghijklmnopqrstuvwxyz") {
+    findTooltipAndClick(e, x);
+  }
+  if (e.key === "Escape") {
+    mode = "normal";
+  }
+  detachTags();
+};
+
 export const keyboardEventToAction = (e: KeyboardEvent): Action => {
   logKeyEvent(e);
   const noCtrlShiftAlt = !e.ctrlKey && !e.shiftKey && !e.altKey;
   const isNormal = mode === "normal";
+  if (mode === "clicking") {
+    console.log(`%cmode is clicking`, "color: red");
+    clickWithKey(e);
+    return {
+      type: "Ignore",
+    };
+  }
   if (e.code === "MetaLeft") {
     // Mac command key or Windows key
     mode = "normal";
@@ -73,6 +110,10 @@ export const keyboardEventToAction = (e: KeyboardEvent): Action => {
       };
     }
     if (mode === "search") {
+      for (let _id of idContainer) {
+        clearTimeout(_id);
+      }
+      mode = "clicking";
       return {
         type: "SearchClickables",
       };
@@ -104,8 +145,6 @@ export const keyboardEventToAction = (e: KeyboardEvent): Action => {
   }
   if (e.code === "KeyG" && e.shiftKey) {
     return createAction({ type: "JumpScrollToBottom" }, isNormal);
-  }
-  if (e.code === "KeyF" && noCtrlShiftAlt) {
   }
 
   return {

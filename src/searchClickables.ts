@@ -1,6 +1,7 @@
 const tagClassName = "xxxx";
 
 // TODO: make it a real generator (it should be simpler)
+// TODO: align radix for all tagNames
 export function tagNameGenerator(i: number) {
   const alphabets = "abcdefghijklmnopqrstuvwxyz";
   const base = alphabets.length;
@@ -21,6 +22,7 @@ export function tagNameGenerator(i: number) {
 
   return res.join("");
 }
+
 export const searchAndTagClickables = () => {
   console.log("searchAndTabClickables");
 
