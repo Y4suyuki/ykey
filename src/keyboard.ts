@@ -12,6 +12,8 @@ type Mode =
 let mode: Mode = "normal";
 let idContainer: NodeJS.Timeout[] = [];
 
+const IgnoreAction: Action = { type: "Ignore" };
+
 const logKeyEvent = (e: KeyboardEvent) => {
   console.log(`%cmode: ${mode}`, "color: white; background: deeppink;");
   console.log(`code: ${e.code}`);
@@ -43,7 +45,7 @@ const createAction = (
     return action;
   }
 
-  return fallback ? fallback() : ({ type: "Ignore" } as Action);
+  return fallback ? fallback() : IgnoreAction;
 };
 
 const findTooltipAndClick = (e: KeyboardEvent, key: string) => {
@@ -71,16 +73,12 @@ export const keyboardEventToAction = (e: KeyboardEvent): Action => {
   if (mode === "clicking") {
     console.log(`%cmode is clicking`, "color: red");
     clickWithKey(e);
-    return {
-      type: "Ignore",
-    };
+    return IgnoreAction;
   }
   if (e.code === "MetaLeft") {
     // Mac command key or Windows key
     mode = "normal";
-    return {
-      type: "Ignore",
-    };
+    return IgnoreAction;
   }
   if (e.code === "KeyJ") {
     return createAction({ type: "ScrollDown" }, isNormal);
@@ -100,7 +98,7 @@ export const keyboardEventToAction = (e: KeyboardEvent): Action => {
   if (e.code === "KeyC" && noCtrlShiftAlt) {
     return createAction({ type: "HistoryBack" }, mode === "switch", () => {
       setMode("switch");
-      return { type: "Ignore" };
+      return IgnoreAction;
     });
   }
   if (e.code === "KeyF" && noCtrlShiftAlt) {
@@ -119,16 +117,12 @@ export const keyboardEventToAction = (e: KeyboardEvent): Action => {
       };
     }
     setMode("search");
-    return {
-      type: "Ignore",
-    };
+    return IgnoreAction;
   }
   if (e.code === "KeyX" && noCtrlShiftAlt) {
     return createAction({ type: "DeleteCurrentTab" }, mode === "delete", () => {
       setMode("delete");
-      return {
-        type: "Ignore",
-      };
+      return IgnoreAction;
     });
   }
   if (e.code === "KeyG" && noCtrlShiftAlt) {
@@ -137,9 +131,7 @@ export const keyboardEventToAction = (e: KeyboardEvent): Action => {
       mode === "jumpScroll",
       () => {
         setMode("jumpScroll");
-        return {
-          type: "Ignore",
-        };
+        return IgnoreAction;
       }
     );
   }
@@ -147,7 +139,5 @@ export const keyboardEventToAction = (e: KeyboardEvent): Action => {
     return createAction({ type: "JumpScrollToBottom" }, isNormal);
   }
 
-  return {
-    type: "Ignore",
-  };
+  return IgnoreAction;
 };
