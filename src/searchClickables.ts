@@ -2,25 +2,29 @@ const tagClassName = "xxxx";
 
 // TODO: make it a real generator (it should be simpler)
 // TODO: align radix for all tagNames
-export function tagNameGenerator(i: number) {
+export function* gen(l: number) {
   const alphabets = "abcdefghijklmnopqrstuvwxyz";
   const base = alphabets.length;
+
   let radix = 1;
-  while (i >= Math.pow(base, radix)) {
+  while (l >= Math.pow(base, radix)) {
     radix++;
   }
-  console.log(`%cradix is ${radix}`, "color: green;");
-  console.log(`%ci is ${i}`, "color:green;");
-  const res = [];
-  let _i = i;
-  for (let j = radix; j > 0; j--) {
-    console.log(`[${i}]j is ${j}`);
-    const _tmp = Math.floor(_i / Math.pow(base, j - 1));
-    res.push(alphabets[_tmp]);
-    _i = _i - _tmp * Math.pow(base, j - 1);
+  let res: string[] = [];
+  for (let r = radix; r > 0; r--) {
+    res.push("a");
   }
-
-  return res.join("");
+  for (let i = 0; i < l; i++) {
+    let tmp = i;
+    for (let r = radix; r > 0; r--) {
+      const k = Math.floor(tmp / Math.pow(base, r - 1));
+      const _res = alphabets[k];
+      console.log(`i = ${i}; r = ${r}; res = ${_res}`);
+      res[res.length - 1 - (r - 1)] = _res;
+      tmp = tmp - k * Math.pow(base, r - 1);
+    }
+    yield res.join("");
+  }
 }
 
 export const searchAndTagClickables = () => {
@@ -28,10 +32,14 @@ export const searchAndTagClickables = () => {
 
   // add tooltips for all clickable element
   const clickables = document.querySelectorAll("a,button");
+  const x = gen(clickables.length);
+
+  console.log(`%cclickables: `, "color: green;");
+  console.log(clickables);
   clickables.forEach((c, i) => {
     const tag = document.createElement("span");
-    const tagName = tagNameGenerator(i);
-    tag.textContent = tagName;
+    const tagName = x.next().value;
+    tag.textContent = tagName ? tagName : "wat???";
     tag.className = `${tagClassName} ${tagName}`;
     tag.style.cssText =
       "color: red; font-size: 20px; position: absolute; background: yellow;";
@@ -46,9 +54,9 @@ export const searchAndTagClickables = () => {
 export const detachTags = () => {
   console.log("detachTags");
 
-  const clickables = document.querySelectorAll(`a,button .${tagClassName}`);
+  const clickables = document.querySelectorAll(`a,button`);
   clickables.forEach((c) => {
-    const tag = c.querySelector("span");
+    const tag = c.querySelector(`span.${tagClassName}`);
     tag.remove();
   });
 };

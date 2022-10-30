@@ -10,6 +10,7 @@ type Mode =
   | "clicking";
 
 let mode: Mode = "normal";
+let searchKey: string = "";
 let idContainer: NodeJS.Timeout[] = [];
 
 const IgnoreAction: Action = { type: "Ignore" };
@@ -48,22 +49,24 @@ const createAction = (
   return fallback ? fallback() : IgnoreAction;
 };
 
-const findTooltipAndClick = (e: KeyboardEvent, key: string) => {
-  if (e.key === key) {
-    const tooltip = document.querySelector(`span.${key}`);
-    const p = tooltip.parentElement;
-    p.click();
-  }
+const finishSearchMode = () => {
+  searchKey = "";
+  mode = "normal";
+  detachTags();
 };
+
 export const clickWithKey = (e: KeyboardEvent) => {
   // TODO: fix
-  for (let x of "abcdefghijklmnopqrstuvwxyz") {
-    findTooltipAndClick(e, x);
+  searchKey = searchKey + e.key;
+  const tooltip = document.querySelector(`span.${searchKey}`);
+  if (tooltip !== null) {
+    const p = tooltip.parentElement;
+    p.click();
+    finishSearchMode();
   }
   if (e.key === "Escape") {
-    mode = "normal";
+    finishSearchMode();
   }
-  detachTags();
 };
 
 export const keyboardEventToAction = (e: KeyboardEvent): Action => {

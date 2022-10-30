@@ -1,14 +1,24 @@
-import { tagNameGenerator } from "./searchClickables";
+import { gen } from "./searchClickables";
 
-it.each([
-  [0, "a"],
-  [1, "b"],
-  [2, "c"],
-  [25, "z"],
-  [26, "ba"],
-  [27, "bb"],
-  [51, "bz"],
-  [52, "ca"],
-])("tagNameGenerator(%p) == %p", (n: number, expected: string) => {
-  expect(tagNameGenerator(n)).toBe(expected);
+it("gen", () => {
+  let x = gen(3);
+
+  expect(x.next().value).toBe("a");
+  expect(x.next().value).toBe("b");
+
+  x = gen(26);
+  expect(x.next().value).toBe("aa");
+  expect(x.next().value).toBe("ab");
+  expect(x.next().value).toBe("ac");
+
+  x = gen(52);
+  const alphabets = "abcdefghijklmnopqrstuvwxyz";
+
+  for (let y of alphabets) {
+    expect(x.next().value).toBe(`a${y}`);
+  }
+
+  for (let y of alphabets) {
+    expect(x.next().value).toBe(`b${y}`);
+  }
 });
