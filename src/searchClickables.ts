@@ -1,3 +1,5 @@
+import { colorTheme } from "./colorTheme";
+
 const tagClassName = "xxxx";
 
 // TODO: make it a real generator (it should be simpler)
@@ -41,8 +43,7 @@ export const searchAndTagClickables = () => {
     const tagName = x.next().value;
     tag.textContent = tagName ? tagName : "wat???";
     tag.className = `${tagClassName} ${tagName}`;
-    tag.style.cssText =
-      "color: red; font-size: 20px; position: absolute; background: yellow;";
+    tag.style.cssText = `color: ${colorTheme.brightPink}; font-size: 20px; position: absolute; background: ${colorTheme.navy}; padding: 2px; border: 1px solid ${colorTheme.palePink}`;
     (c as HTMLElement).style.cssText =
       "posision: relative; display: inline-block;";
     c.appendChild(tag);
